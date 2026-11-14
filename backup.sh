@@ -207,8 +207,10 @@ do_restore() {
 }
 
 do_cron_install() {
-    local line="$CRON $SCRIPT_DIR/backup.sh -c $DEFAULT_CONF"
-    if { crontab -l 2>/dev/null | grep -vF "$line"; echo "$line"; } | crontab -; then
+    local cmd="$SCRIPT_DIR/backup.sh -c $DEFAULT_CONF"
+    local line="$CRON $cmd"
+
+    if { crontab -l 2>/dev/null | grep -vF "$cmd"; echo "$line"; } | crontab -; then
         echo "Cron terpasang: $line"
         return "$EXIT_OK"
     else
@@ -218,8 +220,9 @@ do_cron_install() {
 }
 
 do_cron_remove() {
-    local line="$CRON $SCRIPT_DIR/backup.sh -c $DEFAULT_CONF"
-    if { crontab -l 2>/dev/null | grep -vF "$line"; } | crontab -; then
+    local cmd="$SCRIPT_DIR/backup.sh -c $DEFAULT_CONF"
+
+    if { crontab -l 2>/dev/null | grep -vF "$cmd"; } | crontab -; then
         echo "Cron dihapus (jika sebelumnya terpasang)"
         return "$EXIT_OK"
     else
